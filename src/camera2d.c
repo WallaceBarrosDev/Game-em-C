@@ -16,12 +16,25 @@ void Camera2D_Init(Player *player)
   camera.zoom = 3.0f;
 }
 
+typedef struct {
+  int x;
+  int y;
+} Border;
+
+Border border = {150, 75};
 void Camera2D_Update(Player *player) 
 {
-  camera.target = (Vector2){
-    player->position.x + player->size.x / 2.0f, 
-    player->position.y + player->size.y / 2.0f
-  };
+  if(player->position.y > camera.target.y + border.y)
+    camera.target.y += player->position.y - border.y;
+
+  if(player->position.y < camera.target.y - border.y)
+    camera.target.y -= player->position.y + border.y;
+
+  if(player->position.x > camera.target.x + border.x)
+    camera.target.x += player->position.x - border.x;
+
+  if(player->position.x < camera.target.x - border.x)
+    camera.target.x -= player->position.x + border.x;
 
   float wheel = GetMouseWheelMove();
   
